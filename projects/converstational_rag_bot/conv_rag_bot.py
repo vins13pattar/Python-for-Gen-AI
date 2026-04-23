@@ -23,6 +23,7 @@ from dotenv import load_dotenv
 from langchain_chroma import Chroma
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.documents import Document
+from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables import Runnable, RunnableLambda, RunnableWithMessageHistory
@@ -55,7 +56,16 @@ DOCS = [
 # 2) In-memory chat transcripts (one ChatMessageHistory per session_id)
 # ---------------------------------------------------------------------------
 
-in_memory_store: dict[str, ChatMessageHistory] = {}
+message_history = ChatMessageHistory()
+message_history.add_messages([
+        HumanMessage(content="What is LLM?"),
+        AIMessage(content="LLM is a type of machine learning model that is trained to understand and generate natural language."),
+        
+])
+
+in_memory_store = {
+    "session-123456": message_history,
+}
 
 
 def get_history(session_id: str) -> ChatMessageHistory:
@@ -82,7 +92,7 @@ def build_vector_store() -> Chroma:
         collection_metadata={"hnsw:space": "cosine"},
     )
     vector_store.add_documents(
-        documents=DOCS,
+    documents=DOCS + [Document(page_content="Langchain is a framework for building LLM-powered applications using composable components.", metadata={"source": "langchain", "id": "doc15"})],
         ids=[doc.metadata["id"] for doc in DOCS],
     )
     return vector_store
@@ -169,7 +179,7 @@ def build_rag_chain(vector_store: Chroma, retrieval_type: str, llm: ChatOpenAI) 
     answer_chain = prepare_inputs | rag_prompt | llm | StrOutputParser()
 
     return RunnableWithMessageHistory(
-        answer_chain,
+        answer_chain, #question, history
         get_history,
         input_messages_key="question",
         history_messages_key="history",
