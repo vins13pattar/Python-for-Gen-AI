@@ -16,7 +16,9 @@ prompt_template = PromptTemplate(
 )
 
 prompt_value = prompt_template.invoke({"name": name, "jobs": jobs})
-print("PromptTemplate:", prompt_value.messages[-1].content)
+
+
+print("PromptTemplate:", prompt_value)
 
 # Basic ChatPromptTemplate
 template = ChatPromptTemplate.from_messages([
