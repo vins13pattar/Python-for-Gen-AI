@@ -50,10 +50,14 @@ def call_function(func):
 print(f"call_function(greet): {call_function(greet)}")  # Output: Hello
 
 # Example: Functions can be returned from other functions
-def get_greeting():
-    return greet
+def get_greeting(greet):
+    # extra logic before or after the function call
+    print("Before function execution")
+    result = greet
+    print("After function execution")
+    return result
 
-greeting_func = get_greeting()
+greeting_func = get_greeting(greet)
 print(f"greeting_func(): {greeting_func()}")  # Output: Hello
 
 # ============================================================================
@@ -79,7 +83,7 @@ def say_hi(name):
 
 decorated_func = my_decorator(say_hi)
 print("\n--- Manual decorator application ---")
-decorated_func()
+decorated_func('Vinod')
 # Output:
 # Before function execution
 # Hi!
