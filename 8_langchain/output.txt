@@ -1,0 +1,11 @@
+/Users/vinod/Desktop/Python for Gen AI/8_langchain/.venv/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+Getting weather for:  San Francisco
+Getting weather for:  San Francisco
+Getting weather for:  San Francisco
+Getting weather for:  San Francisco
+Getting weather for:  San Francisco
+Getting weather for:  San Francisco
+Getting weather for:  San Francisco
+Getting weather for:  San Francisco
+Getting weather for:  San Francisco
