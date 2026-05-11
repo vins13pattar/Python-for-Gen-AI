@@ -1,0 +1,18 @@
+[project]
+name = "code-debugger-assistant"
+version = "0.1.0"
+description = "Code Debugger Assistant using LangGraph"
+authors = [
+    {name = "User", email = "user@example.com"}
+]
+dependencies = [
+    "langchain",
+    "langchain-openai",
+    "langgraph",
+    "langsmith",
+    "pydantic"
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"

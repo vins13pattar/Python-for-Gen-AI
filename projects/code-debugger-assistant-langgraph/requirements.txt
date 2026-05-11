@@ -1,0 +1,11 @@
+langchain
+langchain-openai
+langgraph
+langgraph-cli[inmem]
+langgraph-sdk
+langsmith
+pydantic
+python-dotenv
+pytest
+fastapi
+uvicorn
