@@ -17,4 +17,9 @@ class FixGeneration(BaseModel):
 def get_fix_generation_chain():
     """Return the fix generation LCEL chain (lazy, so .env is loaded first)."""
     model = init_chat_model("openai:gpt-4.1-mini", temperature=0.2)
-    return GENERATE_FIX_PROMPT | model.with_structured_output(FixGeneration)
+    chain = GENERATE_FIX_PROMPT | model.with_structured_output(FixGeneration)
+    return chain.with_config(
+        run_name="FixGeneration-Chain",
+        tags=["code-debugger", "chain", "fix-generation"],
+        metadata={"chain": "fix_generation", "pipeline_step": "fix_generation"},
+    )

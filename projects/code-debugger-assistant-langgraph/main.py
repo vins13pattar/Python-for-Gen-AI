@@ -16,11 +16,16 @@ from dotenv import load_dotenv
 load_dotenv()  # Must run before importing app modules (they use init_chat_model lazily)
 
 from langgraph.checkpoint.memory import MemorySaver  # noqa: E402
+from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer  # noqa: E402
 from app.graph import graph as _graph  # noqa: E402
 
-# Add checkpointer for local CLI usage (LangGraph Platform provides its own)
-checkpointer = MemorySaver()
-graph = _graph.compile(checkpointer=checkpointer) if hasattr(_graph, 'compile') else _graph
+# Add checkpointer for local CLI usage (LangGraph Platform provides its own).
+# Register app.schemas.response.DebugReport so msgpack can serialize it.
+serde = JsonPlusSerializer(
+    allowed_msgpack_modules=[("app.schemas.response", "DebugReport")]
+)
+checkpointer = MemorySaver(serde=serde)
+graph = _graph.builder.compile(checkpointer=checkpointer)
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -45,12 +50,20 @@ def stream_and_print(content: str, config: dict) -> dict | str:
     print("📡 Streaming Progress:")
     print()
 
-    for chunk in graph.stream(
+    last_messages = []
+    for event in graph.stream(
         {"messages": [{"role": "user", "content": content}]},
         config=config,
-        stream_mode="custom",
+        stream_mode=["custom", "updates"],
     ):
-        print(f"   ⟳  {chunk}")
+        # event is a tuple (stream_mode_name, data) when using multiple modes
+        mode, data = event
+        if mode == "custom":
+            print(f"   ⟳  {data}")
+        elif mode == "updates":
+            # Track messages from state updates for final extraction
+            if isinstance(data, dict) and "messages" in data:
+                last_messages = data["messages"]
 
     # Retrieve final state
     final_state = graph.get_state(config).values
@@ -125,7 +138,17 @@ def run_single_turn(thread_id: str = "debug-session-1") -> None:
         return
 
     content = build_user_message(code, error_message, expected_behavior)
-    config = {"configurable": {"thread_id": thread_id}}
+    config = {
+        "configurable": {"thread_id": thread_id},
+        "run_name": "CodeDebugger-SingleTurn",
+        "tags": ["code-debugger", "single-turn", "cli"],
+        "metadata": {
+            "project": "code-debugger-assistant",
+            "mode": "single-turn",
+            "thread_id": thread_id,
+            "session_type": "cli",
+        },
+    }
 
     report = stream_and_print(content, config)
     print_report(report)
@@ -144,7 +167,17 @@ def run_multi_turn(thread_id: str = "debug-session-multi") -> None:
     print("  The assistant remembers your previous code and errors within this session.")
     print("  Type 'exit' at any prompt to quit.\n")
 
-    config = {"configurable": {"thread_id": thread_id}}
+    config = {
+        "configurable": {"thread_id": thread_id},
+        "run_name": "CodeDebugger-MultiTurn",
+        "tags": ["code-debugger", "multi-turn", "cli"],
+        "metadata": {
+            "project": "code-debugger-assistant",
+            "mode": "multi-turn",
+            "thread_id": thread_id,
+            "session_type": "cli",
+        },
+    }
     turn = 1
 
     while True:
@@ -177,6 +210,10 @@ def run_multi_turn(thread_id: str = "debug-session-multi") -> None:
                 break
         else:
             content = build_user_message(code, error_msg, expected)
+
+        # Update per-turn metadata for LangSmith tracing
+        config["metadata"]["turn"] = turn
+        config["run_name"] = f"CodeDebugger-MultiTurn-Turn{turn}"
 
         report = stream_and_print(content, config)
         print_report(report)

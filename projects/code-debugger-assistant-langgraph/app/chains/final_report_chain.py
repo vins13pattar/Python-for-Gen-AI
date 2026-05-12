@@ -16,4 +16,9 @@ def get_final_report_chain():
     DebugReport with prevention tips and confidence score.
     """
     model = init_chat_model("openai:gpt-4.1-mini", temperature=0.2)
-    return FORMAT_REPORT_PROMPT | model.with_structured_output(DebugReport)
+    chain = FORMAT_REPORT_PROMPT | model.with_structured_output(DebugReport)
+    return chain.with_config(
+        run_name="FinalReport-Chain",
+        tags=["code-debugger", "chain", "final-report"],
+        metadata={"chain": "final_report", "pipeline_step": "report_generation"},
+    )

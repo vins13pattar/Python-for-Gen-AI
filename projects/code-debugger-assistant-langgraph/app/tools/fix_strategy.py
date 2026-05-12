@@ -1,4 +1,5 @@
 import json
+import langsmith as ls
 from langchain_core.tools import tool
 from langchain.chat_models import init_chat_model
 from pydantic import BaseModel, Field
@@ -26,17 +27,31 @@ def fix_strategy_tool(language: str, code: str, root_cause: str, expected_behavi
         root_cause: Root cause string from bug_classifier_tool.
         expected_behavior: Description of what the code should do.
     """
+    # Attach LangSmith metadata to the current trace
+    rt = ls.get_current_run_tree()
+    if rt:
+        rt.name = "FixStrategy"
+        rt.metadata.update({"pipeline_step": "fix_generation", "tool_type": "generation"})
+        rt.tags = list(set((rt.tags or []) + ["code-debugger", "tool", "fix-generation"]))
+
     writer = get_safe_writer()
     writer("Generating fix strategy and corrected code...")
 
     model = init_chat_model("openai:gpt-4.1-mini", temperature=0.2)
     chain = GENERATE_FIX_PROMPT | model.with_structured_output(FixGeneration)
-    result: FixGeneration = chain.invoke({
-        "language": language,
-        "code": code,
-        "root_cause": root_cause,
-        "expected_behavior": expected_behavior or "Not specified",
-    })
+    result: FixGeneration = chain.invoke(
+        {
+            "language": language,
+            "code": code,
+            "root_cause": root_cause,
+            "expected_behavior": expected_behavior or "Not specified",
+        },
+        config={
+            "run_name": "FixStrategy-Chain",
+            "tags": ["code-debugger", "tool", "fix-generation"],
+            "metadata": {"tool": "fix_strategy_tool", "pipeline_step": "fix_generation"},
+        },
+    )
 
     writer(f"Fix generated ({len(result.changes_made)} change(s) made)")
     return json.dumps(result.model_dump())

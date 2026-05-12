@@ -13,6 +13,6 @@ class DebugReport(BaseModel):
     explanation: str
     fixed_code: str
     changes_made: List[str]
-    test_cases: List[str]
+    test_cases: List[str] = Field(description="List of complete, runnable unit test functions as code strings")
     prevention_tips: List[str]
     confidence_score: float

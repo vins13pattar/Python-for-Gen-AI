@@ -16,4 +16,9 @@ class BugClassification(BaseModel):
 def get_debug_analysis_chain():
     """Return the debug analysis LCEL chain (lazy, so .env is loaded first)."""
     model = init_chat_model("openai:gpt-4.1-mini", temperature=0.2)
-    return CLASSIFY_BUG_PROMPT | model.with_structured_output(BugClassification)
+    chain = CLASSIFY_BUG_PROMPT | model.with_structured_output(BugClassification)
+    return chain.with_config(
+        run_name="DebugAnalysis-Chain",
+        tags=["code-debugger", "chain", "bug-classification"],
+        metadata={"chain": "debug_analysis", "pipeline_step": "bug_classification"},
+    )

@@ -1,4 +1,5 @@
 import json
+import langsmith as ls
 from langchain_core.tools import tool
 from langchain.chat_models import init_chat_model
 from pydantic import BaseModel, Field
@@ -30,17 +31,31 @@ def bug_classifier_tool(language: str, code: str, parsed_error: str, expected_be
         parsed_error: JSON string of parsed error details from traceback_parser_tool.
         expected_behavior: Description of what the code should do.
     """
+    # Attach LangSmith metadata to the current trace
+    rt = ls.get_current_run_tree()
+    if rt:
+        rt.name = "BugClassifier"
+        rt.metadata.update({"pipeline_step": "bug_classification", "tool_type": "analysis"})
+        rt.tags = list(set((rt.tags or []) + ["code-debugger", "tool", "bug-classification"]))
+
     writer = get_safe_writer()
     writer("Classifying bug type and root cause...")
 
     model = init_chat_model("openai:gpt-4.1-mini", temperature=0.2)
     chain = CLASSIFY_BUG_PROMPT | model.with_structured_output(BugClassification)
-    result: BugClassification = chain.invoke({
-        "language": language,
-        "code": code,
-        "parsed_error": parsed_error,
-        "expected_behavior": expected_behavior or "Not specified",
-    })
+    result: BugClassification = chain.invoke(
+        {
+            "language": language,
+            "code": code,
+            "parsed_error": parsed_error,
+            "expected_behavior": expected_behavior or "Not specified",
+        },
+        config={
+            "run_name": "BugClassifier-Chain",
+            "tags": ["code-debugger", "tool", "bug-classification"],
+            "metadata": {"tool": "bug_classifier_tool", "pipeline_step": "bug_classification"},
+        },
+    )
 
     writer(f"Bug classified: {result.bug_type}")
     return json.dumps(result.model_dump())

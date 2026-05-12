@@ -1,3 +1,4 @@
+import langsmith as ls
 from langchain_core.tools import tool
 from app.tools.utils import get_safe_writer
 
@@ -26,6 +27,13 @@ def security_check_tool(code: str, expected_behavior: str = "") -> str:
         code: The source code to inspect.
         expected_behavior: The user's description of what they expect (optional).
     """
+    # Attach LangSmith metadata to the current trace
+    rt = ls.get_current_run_tree()
+    if rt:
+        rt.name = "SecurityCheck"
+        rt.metadata.update({"pipeline_step": "security_check", "tool_type": "guardrail"})
+        rt.tags = list(set((rt.tags or []) + ["code-debugger", "tool", "security"]))
+
     writer = get_safe_writer()
     writer("Running security check...")
 

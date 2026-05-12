@@ -16,4 +16,9 @@ class TestGeneration(BaseModel):
 def get_test_generation_chain():
     """Return the test generation LCEL chain (lazy, so .env is loaded first)."""
     model = init_chat_model("openai:gpt-4.1-mini", temperature=0.3)
-    return TEST_GENERATOR_PROMPT | model.with_structured_output(TestGeneration)
+    chain = TEST_GENERATOR_PROMPT | model.with_structured_output(TestGeneration)
+    return chain.with_config(
+        run_name="TestGeneration-Chain",
+        tags=["code-debugger", "chain", "test-generation"],
+        metadata={"chain": "test_generation", "pipeline_step": "test_generation"},
+    )

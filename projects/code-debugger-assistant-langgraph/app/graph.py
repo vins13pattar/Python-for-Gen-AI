@@ -56,6 +56,7 @@ debug_agent = create_agent(
         limits_middleware,
     ],
     response_format=DebugReport,
+    name="CodeDebuggerAgent",
 )
 
 # Expose as `graph` for `langgraph dev` (langgraph.json points here)
