@@ -1,0 +1,17 @@
+# Environments
+venv/
+.env
+.env.local
+
+# Databases
+chroma_db/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# OS specific files
+.DS_Store
+*.DS_Store
