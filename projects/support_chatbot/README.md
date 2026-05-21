@@ -65,10 +65,17 @@ streamlit run app.py
 
 This will launch a web server and open a new tab in your default browser where you can chat with the MicroDegree Support Assistant.
 
+## Documentation
+
+Detailed architectural and procedural information can be found in the following guides:
+- [Execution Flow & Architecture Guide](file:///Users/vinod/Desktop/Python%20for%20Gen%20AI/projects/support_chatbot/docs/execution_flow_guide.md): Explains the ingestion pipeline, Streamlit frontend, and LangGraph state-machine with step-by-step breakdowns and diagrams.
+- [Product Requirements Document (PRD)](file:///Users/vinod/Desktop/Python%20for%20Gen%20AI/projects/support_chatbot/docs/PRD.md): Detailed product requirements and features list.
+
 ## Project Structure
 
 - `app.py`: Streamlit frontend application.
 - `data/`: Directory where Markdown (`.md`) knowledge base files are stored.
+- `docs/`: Directory containing project documentation.
 - `src/`: Core Python modules.
   - `ingest.py`: Script to process and embed `data/` files into ChromaDB.
   - `graph.py`: LangGraph state machine orchestrating the chatbot's decision flow.
@@ -77,3 +84,4 @@ This will launch a web server and open a new tab in your default browser where y
   - `config.py`: Centralized configuration variables.
   - `vectorstore.py`: Logic for instantiating the retriever.
 - `chroma_db/`: Auto-generated persistent vector database directory (created after running ingestion).
+
