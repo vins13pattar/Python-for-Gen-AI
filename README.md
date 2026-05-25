@@ -11,6 +11,10 @@ A hands-on learning workspace for Python fundamentals and the building blocks co
 - **`5_basic_pydantic/`**: Pydantic basics + a few advanced patterns.
 - **`6_httpx_basics/`**: `httpx` sync/async/streaming patterns, plus LLM-style examples.
 - **`7_jupyter_notebook/`**: Notebook(s) for interactive exploration.
+- **`8_langchain/`**: LangChain v0.3 components — chains, prompts, memory, tools, agents, and LCEL.
+- **`9_langserve/`**: Serving LangChain chains as REST APIs with LangServe.
+- **`10_langgraph/`**: LangGraph — stateful multi-agent workflows with graph-based control flow, HITL, and multi-agent patterns.
+- **`11_crewai/`**: CrewAI — multi-agent orchestration from basics to advanced (tools, flows, hierarchical crews, guardrails, callbacks).
 - **`projects/`**: Larger "projects" sample projects (complete mini-apps you can run end-to-end).
 
 ## Projects
