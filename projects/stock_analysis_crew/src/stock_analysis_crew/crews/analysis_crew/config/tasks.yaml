@@ -1,0 +1,187 @@
+market_data_task:
+  description: >
+    Fetch the latest available market data for the Indian stock {symbol}.
+
+    Use the stock_price_fetcher tool to retrieve:
+    1. Current/latest available price
+    2. Previous close price
+    3. Day's high and low
+    4. 52-week high and low
+    5. Trading volume
+    6. Market capitalization
+    7. PE ratio
+    8. Dividend yield
+    9. Company name, sector, and industry
+
+    Present all data in a clear, structured format.
+    Use INR (₹) currency notation.
+    If any data point is unavailable, clearly note it as "N/A".
+  expected_output: >
+    A structured market data summary for {symbol} containing:
+    company name, current price, previous close, day high/low,
+    52-week high/low, volume, market cap, PE ratio, dividend yield,
+    sector, and industry. All prices in INR.
+  agent: market_data_analyst
+
+technical_analysis_task:
+  description: >
+    Perform comprehensive technical analysis on {symbol} using the
+    technical_indicator_calculator tool.
+
+    Calculate and interpret the following indicators:
+    1. Simple Moving Averages: SMA 20, SMA 50, SMA 200
+    2. Relative Strength Index: RSI (14-period)
+    3. MACD with signal line and histogram
+    4. Volume trend compared to 20-day average
+    5. Support and resistance levels from recent 60-day data
+
+    For each indicator, provide:
+    - The calculated value
+    - What it means in simple language
+    - Whether it signals bullish, bearish, or neutral conditions
+
+    Determine the overall technical trend (Strong Bullish / Bullish / Neutral / Bearish / Strong Bearish).
+  expected_output: >
+    A technical analysis summary containing:
+    - SMA 20, 50, 200 values and price position relative to each
+    - RSI value with overbought/oversold interpretation
+    - MACD values with momentum interpretation
+    - Volume trend assessment
+    - Support and resistance levels
+    - Overall trend conclusion in simple language
+  agent: technical_analyst
+
+fundamental_analysis_task:
+  description: >
+    Analyze the fundamental financial metrics for {symbol} using the
+    financial_metrics_fetcher tool.
+
+    Review and interpret the following metrics:
+    1. Valuation: PE ratio, Forward PE, PEG ratio, Price-to-Book
+    2. Profitability: EPS, Profit margin, Operating margin, Gross margin
+    3. Growth: Revenue growth, Earnings growth
+    4. Financial Health: Debt-to-equity ratio, Current ratio
+    5. Returns: Return on Equity (ROE), Return on Assets (ROA)
+    6. Dividends: Dividend yield, Payout ratio
+    7. Market position: Market cap, Sector, Industry
+
+    For each category, explain what the numbers mean in simple language.
+    Compare against general market benchmarks where possible.
+    Assess whether the stock appears undervalued, fairly valued, or overvalued.
+  expected_output: >
+    A fundamental analysis summary containing:
+    - Valuation assessment with PE, PEG, and P/B analysis
+    - Profitability assessment with margin analysis
+    - Growth trajectory summary
+    - Financial health assessment (debt, liquidity)
+    - Returns efficiency summary
+    - Dividend analysis
+    - Overall fundamental strength conclusion in simple language
+  agent: fundamental_analyst
+
+news_sentiment_task:
+  description: >
+    Search for and analyze recent news about {symbol}.
+
+    Steps:
+    1. Use the stock_news_searcher tool to find recent news headlines
+    2. If insufficient news from the tool, use the Serper web search
+       to search for "{symbol} stock news India latest"
+    3. Analyze at least 5-10 recent headlines
+    4. Classify each headline as Positive, Neutral, or Negative
+    5. Determine the overall news sentiment
+
+    Consider these categories:
+    - Quarterly results and earnings
+    - Management changes and commentary
+    - Expansion plans and new ventures
+    - Regulatory developments
+    - Analyst upgrades or downgrades
+    - Sector trends affecting the company
+
+    Present findings objectively without personal bias.
+  expected_output: >
+    A news sentiment analysis containing:
+    - List of 5-10 recent news headlines with sentiment classification
+    - Overall sentiment: Positive / Neutral / Negative
+    - Key positive factors from news
+    - Key negative factors from news (if any)
+    - Summary paragraph explaining the news sentiment
+  agent: news_sentiment_analyst
+
+risk_analysis_task:
+  description: >
+    Based on all the data gathered by previous analysts for {symbol},
+    identify and assess key investment risks.
+
+    Evaluate the following risk categories:
+    1. Valuation Risk: Is the stock overvalued? Compare PE to sector averages.
+    2. Market Risk: How volatile is the stock? What is the beta?
+    3. Sector Risk: Are there industry-specific headwinds?
+    4. Regulatory Risk: Any regulatory concerns for this sector in India?
+    5. Debt Risk: Is the debt level concerning?
+    6. News/Event Risk: Any upcoming events that could impact the stock?
+
+    For each risk:
+    - Rate as High, Medium, or Low
+    - Explain why in simple language
+    - Suggest what an investor should watch for
+  expected_output: >
+    A risk assessment containing:
+    - 5-6 risk categories, each with:
+      - Risk level: High / Medium / Low
+      - Explanation in simple language
+      - What to watch for
+    - Overall risk summary
+    - Key risk that investors should be most aware of
+  agent: risk_analyst
+
+report_generation_task:
+  description: >
+    Using all the analysis from the previous agents, create a comprehensive
+    stock analysis report for {symbol}.
+
+    The report MUST follow this exact structure:
+
+    # Stock Analysis Report: {symbol}
+
+    ## 1. Stock Overview
+    Brief company description, sector, and market position.
+
+    ## 2. Market Data Summary
+    Current price, key price data in a bullet list with ₹ symbols.
+
+    ## 3. Technical Analysis
+    Summary of trend, SMA signals, RSI, MACD in beginner-friendly language.
+
+    ## 4. Fundamental Analysis
+    Key financial metrics and what they mean for the company.
+
+    ## 5. News Sentiment
+    Recent news summary and overall sentiment classification.
+
+    ## 6. Key Risks
+    Risk factors with severity ratings (High/Medium/Low).
+
+    ## 7. Educational View
+    An educational "Buy / Hold / Avoid" style assessment.
+    IMPORTANT: Frame this as educational insight, NOT financial advice.
+    Use language like "Based on the data, the stock appears to..." 
+
+    ## Disclaimer
+    Include the standard disclaimer that this is for educational purposes only
+    and not financial advice. Advise consulting a SEBI-registered advisor.
+
+    Writing style:
+    - Use simple, beginner-friendly language
+    - Use bullet points for data presentation
+    - Use ₹ symbol for Indian currency
+    - Keep the tone professional but accessible
+    - Total report length: 800-1200 words
+  expected_output: >
+    A complete stock analysis report in Markdown format with all 7 sections
+    plus disclaimer. The report should be 800-1200 words, use ₹ for currency,
+    bullet points for data, and beginner-friendly language throughout.
+    The report must end with a financial disclaimer.
+  agent: report_writer
+  output_file: output/report.md

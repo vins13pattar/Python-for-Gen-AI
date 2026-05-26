@@ -1,0 +1,31 @@
+[project]
+name = "stock_analysis_crew"
+version = "0.1.0"
+description = "Stock Analysis Crew — Multi-agent Indian stock analysis using CrewAI"
+authors = [{ name = "Vinod", email = "vinod@example.com" }]
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "crewai[tools]==1.14.5a2",
+    "yfinance>=0.2.40",
+    "pandas>=2.0.0",
+    "pandas-ta>=0.3.14b",
+    "streamlit>=1.35.0",
+    "plotly>=5.22.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.scripts]
+kickoff = "stock_analysis_crew.main:kickoff"
+run_crew = "stock_analysis_crew.main:kickoff"
+plot = "stock_analysis_crew.main:plot"
+run_with_trigger = "stock_analysis_crew.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+prerelease = "allow"
+
+[tool.crewai]
+type = "flow"

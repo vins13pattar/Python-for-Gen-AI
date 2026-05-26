@@ -19,7 +19,7 @@ These features turn CrewAI from a toy into a production-ready tool.
 """
 
 import os
-from typing import List
+from typing import Any, List, Tuple
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -100,7 +100,7 @@ def metrics_callback(output):
 # Return (True, output) if valid, or (False, "error message") to retry.
 # The agent will see the error message and try to fix its output.
 
-def validate_trend_count(output) -> tuple:
+def validate_trend_count(output) -> Tuple[bool, Any]:
     """
     Guardrail: Ensure the report contains at least 3 trends.
     If not, the agent is asked to retry with feedback.
@@ -134,7 +134,7 @@ def validate_trend_count(output) -> tuple:
         return (False, f"Validation error: {e}. Please try again.")
 
 
-def validate_no_placeholder(output) -> tuple:
+def validate_no_placeholder(output) -> Tuple[bool, Any]:
     """
     Guardrail: Reject outputs that contain placeholder text.
     Common with LLMs that generate "[insert here]" type content.

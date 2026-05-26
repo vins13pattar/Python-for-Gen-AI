@@ -212,3 +212,9 @@ __marimo__/
 
 # Vector DB
 chroma_db/
+
+# Agent IDE & Graphify files
+.agents/
+graphify-out/
+generate_graph.py
+make_graphify_06.py
