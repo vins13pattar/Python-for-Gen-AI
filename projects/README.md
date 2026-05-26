@@ -28,3 +28,10 @@ A compact LangChain demo that pairs **retrieval-augmented generation** with **pe
 - **Stack**: LangChain (LCEL), Chroma, OpenAI (chat + embeddings).
 - **Features**: CLI loop, explicit prepare step for prompt inputs (context / question / history), optional Excalidraw diagram; see the project `README.md` for setup and env vars.
 
+### 7. [Stock Analysis Crew](./stock_analysis_crew/)
+A state-of-the-art multi-agent investment research and education assistant designed for the Indian stock market using CrewAI.
+- **Stack**: CrewAI (Flows & Crews), yfinance, pandas-ta, Streamlit, OpenAI.
+- **Agents**: Collaborative 6-agent sequential team (Market Data, Technicals, Fundamentals, News Sentiment, Risk, and Report Writer).
+- **Features**: Real-time price tracking, automated indicator computation (SMAs, RSI, MACD), news sentiment classification, key risks evaluation, educational view, SEBI disclaimer compliance, and a premium interactive Streamlit dashboard.
+
+
