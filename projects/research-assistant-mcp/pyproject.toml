@@ -1,0 +1,44 @@
+[project]
+name = "research-assistant-mcp"
+version = "0.1.0"
+description = "Research Assistant System — Multi-Agent Collaboration with MCP, LangGraph, and CrewAI"
+authors = [{ name = "Vinod", email = "vinod@example.com" }]
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "langgraph>=0.2.0",
+    "langchain>=0.3.0",
+    "langchain-openai>=0.2.0",
+    "langchain-community>=0.3.0",
+    "crewai[tools]>=0.80.0",
+    "fastmcp>=2.0.0",
+    "jsonschema>=4.23.0",
+    "openai>=1.50.0",
+    "sentence-transformers>=3.0.0",
+    "python-dotenv>=1.0.0",
+    "typer>=0.12.0",
+    "rich>=13.7.0",
+    "numpy>=1.26.0",
+]
+
+[project.scripts]
+research = "app.main:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.uv]
+prerelease = "allow"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]

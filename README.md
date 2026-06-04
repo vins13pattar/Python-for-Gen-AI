@@ -1,6 +1,6 @@
 # Python for Gen AI
 
-A hands-on learning workspace for Python fundamentals and the building blocks commonly used in Gen AI apps (HTTP clients, FastAPI, Pydantic, notebooks).
+A hands-on learning workspace for Python fundamentals and the building blocks commonly used in Gen AI apps — HTTP clients, FastAPI, Pydantic, LangChain, LangGraph, CrewAI, and **MCP (Model Context Protocol)**.
 
 ## Repository map
 
@@ -15,6 +15,7 @@ A hands-on learning workspace for Python fundamentals and the building blocks co
 - **`9_langserve/`**: Serving LangChain chains as REST APIs with LangServe.
 - **`10_langgraph/`**: LangGraph — stateful multi-agent workflows with graph-based control flow, HITL, and multi-agent patterns.
 - **`11_crewai/`**: CrewAI — multi-agent orchestration from basics to advanced (tools, flows, hierarchical crews, guardrails, callbacks).
+- **`12_mcp/`**: MCP (Model Context Protocol) — full coverage from basics to production patterns: tools, resources, prompts, transports, server context, lifespan, caching, and LangChain integration.
 - **`projects/`**: Larger "projects" sample projects (complete mini-apps you can run end-to-end).
 
 ## Projects
@@ -110,6 +111,23 @@ pip install -r requirements.txt  # if this module has one
 python3 1_python_basics/1_print_functions.py
 python3 4_requests_basics/01_get_json.py
 python3 6_httpx_basics/01_httpx-basics.py
+```
+
+### MCP (Model Context Protocol)
+
+```bash
+cd "12_mcp"
+python3 -m venv .venv
+source .venv/bin/activate
+pip install fastmcp mcp python-dotenv
+
+python 1_mcp_basics.py          # protocol basics, server & client
+python 2_mcp_tools.py           # all tool definition patterns
+python 3_mcp_resources.py       # static, dynamic & template resources
+python 4_mcp_prompts.py         # reusable prompt templates
+python 5_mcp_transports.py      # stdio, SSE & in-process transports
+python 6_mcp_with_langchain.py  # MCP tools inside LangChain agents
+python 7_mcp_context_and_state.py  # lifespan, caching, progress reporting
 ```
 
 ### FastAPI

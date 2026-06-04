@@ -1,0 +1,13 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Model Context Protocol (MCP) Core Dependencies
+# ══════════════════════════════════════════════════════════════════════════════
+fastmcp>=3.3.1           # High-level Python SDK for building MCP servers
+mcp>=1.27.2              # Official MCP base protocol & client utilities
+python-dotenv>=1.2.2     # Environment variable management (.env files)
+
+# ══════════════════════════════════════════════════════════════════════════════
+# LLM & Agent Framework Integration (For LangChain Example)
+# ══════════════════════════════════════════════════════════════════════════════
+langchain>=1.3.2         # Orchestration framework for LLMs and agents
+langchain-openai>=1.2.2  # OpenAI integration for LangChain
+langchain-mcp-adapters>=0.2.2  # Bridge: converts MCP tools -> LangChain tools

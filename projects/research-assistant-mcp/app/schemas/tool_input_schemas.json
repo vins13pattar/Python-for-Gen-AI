@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MCPToolInputSchemas",
+  "description": "JSON Schemas for MCP server tool input validation.",
+  "definitions": {
+    "SaveContextInput": {
+      "type": "object",
+      "required": ["session_id", "chunk"],
+      "properties": {
+        "session_id": { "type": "string", "minLength": 1 },
+        "chunk": {
+          "type": "object",
+          "required": ["chunk_id", "text"],
+          "properties": {
+            "chunk_id": { "type": "string" },
+            "text": { "type": "string", "minLength": 1 },
+            "question": { "type": "string" },
+            "source": { "type": "string" },
+            "source_type": { "type": "string" }
+          }
+        }
+      }
+    },
+    "GetContextInput": {
+      "type": "object",
+      "required": ["session_id"],
+      "properties": {
+        "session_id": { "type": "string", "minLength": 1 },
+        "question": { "type": "string" }
+      }
+    },
+    "SaveEmbeddingInput": {
+      "type": "object",
+      "required": ["session_id", "embedding_record"],
+      "properties": {
+        "session_id": { "type": "string", "minLength": 1 },
+        "embedding_record": {
+          "type": "object",
+          "required": ["chunk_id", "embedding_id", "embedding"],
+          "properties": {
+            "chunk_id": { "type": "string" },
+            "embedding_id": { "type": "string" },
+            "text": { "type": "string" },
+            "embedding": {
+              "type": "array",
+              "items": { "type": "number" }
+            },
+            "metadata": { "type": "object" }
+          }
+        }
+      }
+    },
+    "SearchContextInput": {
+      "type": "object",
+      "required": ["session_id", "query"],
+      "properties": {
+        "session_id": { "type": "string", "minLength": 1 },
+        "query": { "type": "string", "minLength": 1 },
+        "top_k": { "type": "integer", "minimum": 1, "maximum": 20 }
+      }
+    },
+    "LogAgentMessageInput": {
+      "type": "object",
+      "required": ["session_id", "message"],
+      "properties": {
+        "session_id": { "type": "string", "minLength": 1 },
+        "message": { "type": "object" }
+      }
+    }
+  }
+}

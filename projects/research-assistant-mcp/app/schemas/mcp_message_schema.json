@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MCPAgentMessage",
+  "description": "Schema for MCP-style agent-to-agent messages in the Research Assistant System.",
+  "type": "object",
+  "required": [
+    "message_id",
+    "session_id",
+    "sender_agent",
+    "receiver_agent",
+    "message_type",
+    "timestamp",
+    "payload"
+  ],
+  "properties": {
+    "message_id": {
+      "type": "string",
+      "description": "Unique identifier for this message.",
+      "minLength": 1
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Research session this message belongs to.",
+      "minLength": 1
+    },
+    "sender_agent": {
+      "type": "string",
+      "description": "Name of the agent sending this message.",
+      "enum": [
+        "planner_agent",
+        "retriever_agent",
+        "embedding_agent",
+        "analyst_agent",
+        "critic_agent",
+        "writer_agent",
+        "system"
+      ]
+    },
+    "receiver_agent": {
+      "type": "string",
+      "description": "Name of the target agent or 'broadcast' for all agents.",
+      "minLength": 1
+    },
+    "message_type": {
+      "type": "string",
+      "description": "Type of message being sent.",
+      "enum": [
+        "research_plan_created",
+        "context_retrieved",
+        "embeddings_created",
+        "findings_created",
+        "critique_created",
+        "final_report_created",
+        "error",
+        "status_update"
+      ]
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "ISO 8601 timestamp when the message was created.",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "description": "The actual message data — structure varies by message_type."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional metadata such as priority, retry count, etc.",
+      "properties": {
+        "priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "requires_response": {
+          "type": "boolean"
+        },
+        "retry_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
